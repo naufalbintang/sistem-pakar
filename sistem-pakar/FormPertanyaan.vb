@@ -58,12 +58,14 @@
             label.Font = New Font("Segoe UI", 10, FontStyle.Bold)
             groupBox.Controls.Add(label)
 
+
             'buat radio button "YA"
             Dim radioButtonYa As New RadioButton()
             radioButtonYa.Text = "Ya"
             radioButtonYa.Location = New Point(20, 80)
             radioButtonYa.Font = New Font("Segoe UI", 9)
             radioButtonYa.AutoSize = True
+            groupBox.Controls.Add(radioButtonYa)
 
             'buat radio button "TIDAK"
             Dim radioButtonTidak As New RadioButton()
@@ -71,6 +73,7 @@
             radioButtonTidak.Location = New Point(100, 80)
             radioButtonTidak.Font = New Font("Segoe UI", 9)
             radioButtonTidak.AutoSize = True
+            groupBox.Controls.Add(radioButtonTidak)
 
             'masukkan kotak ke panel
             PanelPertanyaan.Controls.Add(groupBox)
@@ -94,19 +97,37 @@
     End Sub
 
     'simpan jawaban sementara
-    'Sub simpanJawabanSementara()
-    '    'cek satu per satu group box yang tampil
-    '    For Each groupBox As Control In PanelPertanyaan.Controls
-    '        If TypeOf groupBox Is GroupBox Then
-    '            'ambil id soal dari nama group box (misal GroupBox5 -> ambil angka 5)
-    '            Dim indexSoal
+    Sub simpanJawabanSementara()
+        'cek satu per satu group box yang tampil
+        For Each groupBox As Control In PanelPertanyaan.Controls
+            If TypeOf groupBox Is GroupBox Then
+                'ambil id soal dari nama group box (misal GroupBox5 -> ambil angka 5)
+                Dim indexSoal As Integer = CInt(groupBox.Name.Replace("GroupBox", ""))
 
-    '        End If
-    '    Next
-    'End Sub
+                'cari radio button di dalam group box tersebut
+                Dim radioButtonYa As RadioButton = Nothing
+                Dim radioButtonTidak As RadioButton = Nothing
 
+                For Each c As Control In groupBox.Controls
+                    If TypeOf c Is RadioButton Then
+                        If c.Text = "Ya" Then radioButtonYa = c
+                        If c.Text = "Tidak" Then radioButtonTidak = c
+                    End If
+                Next
+
+                'simpan ke array global
+                If radioButtonYa IsNot Nothing AndAlso radioButtonYa.Checked Then
+                    jawabanUser(indexSoal) = "Y"
+                ElseIf radioButtonTidak IsNot Nothing AndAlso radioButtonTidak.checked Then
+                    jawabanUser(indexSoal) = "T"
+                End If
+            End If
+        Next
+    End Sub
+
+    'tombol selanjutnya
     Private Sub ButtonSelanjutnya_Click(sender As Object, e As EventArgs) Handles ButtonSelanjutnya.Click
-        'simpanJawabanSementara()
+        simpanJawabanSementara()
 
         If ButtonSelanjutnya.Text = "Selesai" Then
             'cek apakah semua soal sudah dijawab?
@@ -131,5 +152,12 @@
             halamanSaatIni += 1
             tampilkanHalaman(halamanSaatIni)
         End If
+    End Sub
+
+    'tombol sebelumnya
+    Private Sub ButtonSebelumnya_Click(sender As Object, e As EventArgs) Handles ButtonSebelumnya.Click
+        simpanJawabanSementara()
+        halamanSaatIni -= 1
+        tampilkanHalaman(halamanSaatIni)
     End Sub
 End Class
