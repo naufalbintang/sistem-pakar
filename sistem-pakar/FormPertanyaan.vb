@@ -5,7 +5,7 @@
     Dim jumlahPerHalaman As Integer = 4
 
     'array untuk menyimpan jawaban user
-    Dim jawabanUser(19) As String
+    Dim jawabanUser(19) As Integer
 
     'saat form dibuka
     Private Sub FormPertanyaan_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -21,7 +21,7 @@
 
         'bersihkan array jawaban
         For i As Integer = 0 To 19
-            jawabanUser(i) = ""
+            jawabanUser(i) = -1
         Next
 
         'tampilkan halaman
@@ -65,7 +65,7 @@
             radioButtonYa.Location = New Point(20, 80)
             radioButtonYa.Font = New Font("Segoe UI", 9)
             radioButtonYa.AutoSize = True
-            If jawabanUser(i) = "Y" Then
+            If jawabanUser(i) = 1 Then
                 radioButtonYa.Checked = True
             End If
             groupBox.Controls.Add(radioButtonYa)
@@ -76,7 +76,7 @@
             radioButtonTidak.Location = New Point(100, 80)
             radioButtonTidak.Font = New Font("Segoe UI", 9)
             radioButtonTidak.AutoSize = True
-            If jawabanUser(i) = "T" Then
+            If jawabanUser(i) = 0 Then
                 radioButtonTidak.Checked = True
             End If
             groupBox.Controls.Add(radioButtonTidak)
@@ -123,9 +123,9 @@
 
                 'simpan ke array global
                 If radioButtonYa IsNot Nothing AndAlso radioButtonYa.Checked Then
-                    jawabanUser(indexSoal) = "Y"
+                    jawabanUser(indexSoal) = 1
                 ElseIf radioButtonTidak IsNot Nothing AndAlso radioButtonTidak.checked Then
-                    jawabanUser(indexSoal) = "T"
+                    jawabanUser(indexSoal) = 0
                 End If
             End If
         Next
@@ -139,7 +139,7 @@
             'cek apakah semua soal sudah dijawab?
             Dim adaYangKosong As Boolean = False
             For i As Integer = 0 To dtPertanyaan.Rows.Count - 1
-                If jawabanUser(i) = "" Then
+                If jawabanUser(i) = Nothing Then
                     adaYangKosong = True
                     Exit For
                 End If
