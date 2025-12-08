@@ -65,6 +65,9 @@
             radioButtonYa.Location = New Point(20, 80)
             radioButtonYa.Font = New Font("Segoe UI", 9)
             radioButtonYa.AutoSize = True
+            If jawabanUser(i) = "Ya" Then
+                radioButtonYa.Checked = True
+            End If
             groupBox.Controls.Add(radioButtonYa)
 
             'buat radio button "TIDAK"
@@ -73,6 +76,9 @@
             radioButtonTidak.Location = New Point(100, 80)
             radioButtonTidak.Font = New Font("Segoe UI", 9)
             radioButtonTidak.AutoSize = True
+            If jawabanUser(i) = "Tidak" Then
+                radioButtonTidak.Checked = True
+            End If
             groupBox.Controls.Add(radioButtonTidak)
 
             'masukkan kotak ke panel
