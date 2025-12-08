@@ -27,7 +27,7 @@ Public Class FormLogin
                                 MsgBox("Login berhasil!", MsgBoxStyle.Information, "Sukses")
                                 Dim FormPertanyaan As New FormPertanyaan()
                                 FormPertanyaan.Show()
-                                Me.Close()
+                                Me.Hide()
                             Else
                                 MsgBox("Password salah!", MsgBoxStyle.Critical, "Gagal")
                             End If

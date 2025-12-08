@@ -3,119 +3,133 @@
     Dim dtPertanyaan As DataTable
     Dim halamanSaatIni As Integer = 0
     Dim jumlahPerHalaman As Integer = 4
-    Dim totalHalaman As Integer = 5
 
-    'array untuk menyimpan jawaban sementara (soal 0-19)
+    'array untuk menyimpan jawaban user
     Dim jawabanUser(19) As String
 
+    'saat form dibuka
     Private Sub FormPertanyaan_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'ambil 20 data dari database
+        'ambil pertanyaan dari database
         dtPertanyaan = ModuleDB.AmbilSemuaPertanyaan()
 
+        'validasi jika kosong
         If dtPertanyaan.Rows.Count = 0 Then
-            MsgBox("Data pertanyaan kosong!")
+            MsgBox("Data tidak ditemukan! Silakan cek database.", MsgBoxStyle.Critical, "Gagal")
             Me.Close()
             Return
         End If
 
-        'siapkan array jawaban
+        'bersihkan array jawaban
         For i As Integer = 0 To 19
             jawabanUser(i) = ""
         Next
 
-        'tampilkan halaman pertama
+        'tampilkan halaman
         tampilkanHalaman(0)
     End Sub
 
+    'render halaman
     Sub tampilkanHalaman(halaman As Integer)
+        'hapus semua kontrol dalam panel
+        PanelPertanyaan.Controls.Clear()
+
+        'menentukan index start dan end halaman ini
         Dim indexMulai As Integer = halaman * jumlahPerHalaman
+        Dim indexAkhir As Integer = Math.Min(indexMulai + jumlahPerHalaman - 1, dtPertanyaan.Rows.Count - 1)
+        Dim totalHalaman As Integer = Math.Ceiling(dtPertanyaan.Rows.Count / jumlahPerHalaman)
 
-        'loop untuk mengisi 4 slot
-        For i As Integer = 1 To 4
-            Dim indexData As Integer = indexMulai + (i - 1)
+        'loop untuk membuat card pertanyaan
+        For i As Integer = indexMulai To indexAkhir
+            'buat wadah (groupbox)
+            Dim groupBox As New GroupBox()
+            groupBox.Name = "GroupBox" & i
+            groupBox.Text = ""
+            groupBox.Width = PanelPertanyaan.Width - 40
+            groupBox.Height = 130
+            groupBox.BackColor = Color.White
+            groupBox.Margin = New Padding(0, 0, 0, 15)
 
-            'cari kontrol berdasarkan nama string
-            Dim label As Label = Me.Controls.Find("LabelTanya" & i, True).FirstOrDefault()
-            Dim radioButtonYa As RadioButton = Me.Controls.Find("RadioButtonYa" & i, True).FirstOrDefault()
-            Dim radioButtonTidak As RadioButton = Me.Controls.Find("RadioButtonTidak" & i, True).FirstOrDefault()
-            Dim groupBox As GroupBox = label.Parent
+            'buat label soal
+            Dim label As New Label()
+            label.Text = (i + 1) & ". " & dtPertanyaan.Rows(i)("teks_pertanyaan").ToString()
+            label.Location = New Point(15, 20)
+            label.AutoSize = False
+            label.Size = New Size(groupBox.Width - 30, 50)
+            label.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+            groupBox.Controls.Add(label)
 
-            'cek apakah datanya ada?
-            If indexData < dtPertanyaan.Rows.Count Then
-                groupBox.Visible = True
+            'buat radio button "YA"
+            Dim radioButtonYa As New RadioButton()
+            radioButtonYa.Text = "Ya"
+            radioButtonYa.Location = New Point(20, 80)
+            radioButtonYa.Font = New Font("Segoe UI", 9)
+            radioButtonYa.AutoSize = True
 
-                'memasukkan teks soal dari database
-                label.Text = dtPertanyaan.Rows(indexData)("teks_pertanyaan").ToString()
+            'buat radio button "TIDAK"
+            Dim radioButtonTidak As New RadioButton()
+            radioButtonTidak.Text = "Tidak"
+            radioButtonTidak.Location = New Point(100, 80)
+            radioButtonTidak.Font = New Font("Segoe UI", 9)
+            radioButtonTidak.AutoSize = True
 
-                'reset radio button
-                radioButtonYa.Checked = False
-                radioButtonTidak.Checked = False
-
-                'load jawaban lama kalo user udah pernah jawab
-                If jawabanUser(indexData) = "Y" Then
-                    radioButtonYa.Checked = True
-                ElseIf jawabanUser(indexData) = "T" Then
-                    radioButtonTidak.Checked = True
-                End If
-            Else
-                groupBox.Visible = False
-            End If
+            'masukkan kotak ke panel
+            PanelPertanyaan.Controls.Add(groupBox)
         Next
+
+        'update info halaman
+        If LabelHalaman IsNot Nothing Then
+            LabelHalaman.Text = "Halaman " & (halaman + 1) & " dari " & totalHalaman
+        End If
 
         'atur status tombol
         ButtonSebelumnya.Enabled = (halaman > 0)
 
         If (indexMulai + jumlahPerHalaman) >= dtPertanyaan.Rows.Count Then
             ButtonSelanjutnya.Text = "Selesai"
+            ButtonSelanjutnya.BackColor = Color.ForestGreen
         Else
             ButtonSelanjutnya.Text = "Selanjutnya"
+            ButtonSelanjutnya.BackColor = Color.DodgerBlue
         End If
     End Sub
 
-    'tombol selanjutnya
-    Private Sub ButtonSelanjutnya_Click(sender As Object, e As EventArgs) Handles ButtonSelanjutnya.Click
-        SimpanJawabanSementara()
+    'simpan jawaban sementara
+    'Sub simpanJawabanSementara()
+    '    'cek satu per satu group box yang tampil
+    '    For Each groupBox As Control In PanelPertanyaan.Controls
+    '        If TypeOf groupBox Is GroupBox Then
+    '            'ambil id soal dari nama group box (misal GroupBox5 -> ambil angka 5)
+    '            Dim indexSoal
 
-        'cek apakah sudah halaman terakhir
-        If ButtonSelanjutnya.Text = "Selesai " Then
-            'proses hitung skor / simpan ke db
-            MsgBox("Jawaban berhasil disimpan!")
-            'FormHasil.Show()
+    '        End If
+    '    Next
+    'End Sub
+
+    Private Sub ButtonSelanjutnya_Click(sender As Object, e As EventArgs) Handles ButtonSelanjutnya.Click
+        'simpanJawabanSementara()
+
+        If ButtonSelanjutnya.Text = "Selesai" Then
+            'cek apakah semua soal sudah dijawab?
+            Dim adaYangKosong As Boolean = False
+            For i As Integer = 0 To dtPertanyaan.Rows.Count - 1
+                If jawabanUser(i) = "" Then
+                    adaYangKosong = True
+                    Exit For
+                End If
+            Next
+
+            If adaYangKosong Then
+                Dim response = MsgBox("Masih ada soal yang belum dijawab. Yakin mau selesai?", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation)
+                If response = MsgBoxResult.No Then Return
+            End If
+
+            MsgBox("Jawaban anda telah disimpan!", MsgBoxStyle.Information)
+            Dim FormHasil As New FormHasil()
+            Me.Hide()
+            FormHasil.Show()
         Else
             halamanSaatIni += 1
             tampilkanHalaman(halamanSaatIni)
         End If
-
     End Sub
-
-    'tombol sebelumnya
-    Private Sub ButtonSebelumnya_Click(sender As Object, e As EventArgs) Handles ButtonSebelumnya.Click
-        SimpanJawabanSementara()
-
-        halamanSaatIni -= 1
-        tampilkanHalaman(halamanSaatIni)
-    End Sub
-
-    'logika menyimpan jawaban ke array
-    Sub SimpanJawabanSementara()
-        Dim indexMulai As Integer = halamanSaatIni * jumlahPerHalaman
-
-        For i As Integer = 1 To 4
-            Dim indexData As Integer = indexMulai + (i - 1)
-
-            'cek batasan data
-            If indexData >= dtPertanyaan.Rows.Count Then Exit For
-
-            Dim radioButtonYa As RadioButton = Me.Controls.Find("RadioButtonYa" & i, True).FirstOrDefault()
-            Dim radioButtonTidak As RadioButton = Me.Controls.Find("RadioButtonTidak" & i, True).FirstOrDefault()
-
-            If radioButtonYa.Checked Then
-                jawabanUser(indexData) = "Y"
-            ElseIf radioButtonTidak.Checked Then
-                jawabanUser(indexData) = "T"
-            End If
-        Next
-    End Sub
-
-
 End Class
