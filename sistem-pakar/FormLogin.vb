@@ -25,6 +25,9 @@ Public Class FormLogin
 
                             If FormPassword = passwordDB Then
                                 MsgBox("Login berhasil!", MsgBoxStyle.Information, "Sukses")
+                                Dim FormPertanyaan As New FormPertanyaan()
+                                FormPertanyaan.Show()
+                                Me.Close()
                             Else
                                 MsgBox("Password salah!", MsgBoxStyle.Critical, "Gagal")
                             End If

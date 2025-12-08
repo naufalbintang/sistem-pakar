@@ -121,6 +121,7 @@ Partial Class FormRegister
         Controls.Add(LabelNama)
         Controls.Add(TextBoxNIM)
         Controls.Add(LabelNIM)
+        MaximizeBox = False
         Name = "FormRegister"
         Text = "FormRegister"
         ResumeLayout(False)
