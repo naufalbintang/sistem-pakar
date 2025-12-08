@@ -65,7 +65,7 @@
             radioButtonYa.Location = New Point(20, 80)
             radioButtonYa.Font = New Font("Segoe UI", 9)
             radioButtonYa.AutoSize = True
-            If jawabanUser(i) = "Ya" Then
+            If jawabanUser(i) = "Y" Then
                 radioButtonYa.Checked = True
             End If
             groupBox.Controls.Add(radioButtonYa)
@@ -76,7 +76,7 @@
             radioButtonTidak.Location = New Point(100, 80)
             radioButtonTidak.Font = New Font("Segoe UI", 9)
             radioButtonTidak.AutoSize = True
-            If jawabanUser(i) = "Tidak" Then
+            If jawabanUser(i) = "T" Then
                 radioButtonTidak.Checked = True
             End If
             groupBox.Controls.Add(radioButtonTidak)
