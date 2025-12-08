@@ -139,25 +139,33 @@
             'cek apakah semua soal sudah dijawab?
             Dim adaYangKosong As Boolean = False
             For i As Integer = 0 To dtPertanyaan.Rows.Count - 1
-                If jawabanUser(i) = Nothing Then
+                If jawabanUser(i) = -1 Then
                     adaYangKosong = True
                     Exit For
                 End If
             Next
 
             If adaYangKosong Then
-                Dim response = MsgBox("Masih ada soal yang belum dijawab. Yakin mau selesai?", MsgBoxStyle.YesNo + MsgBoxStyle.Exclamation)
-                If response = MsgBoxResult.No Then Return
+                Dim response = MsgBox("Masih ada soal yang belum dijawab!", MsgBoxStyle.Exclamation)
+                Return
             End If
 
-            MsgBox("Jawaban anda telah disimpan!", MsgBoxStyle.Information)
+            'kirim array jawabanUser() ke fungsi cekRekomendasiTopik di ModuleInferensi
+            Dim hasilRekomendasi As String = ModuleInferensi.cekRekomendasiTopik(jawabanUser)
+
+            MsgBox("Jawaban anda berhasil disimpan", MsgBoxStyle.Information, "Sukses")
+
+            'mengirim data ke FormHasil
             Dim FormHasil As New FormHasil()
+            FormHasil.LabelHasil.Text = hasilRekomendasi
             Me.Hide()
             FormHasil.Show()
+            Debug.WriteLine(hasilRekomendasi)
         Else
             halamanSaatIni += 1
             tampilkanHalaman(halamanSaatIni)
         End If
+
     End Sub
 
     'tombol sebelumnya
