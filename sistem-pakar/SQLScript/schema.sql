@@ -46,7 +46,7 @@ CREATE TABLE [dbo].[Akun] (
     [Id_user]  VARCHAR (18)  NOT NULL, -- Panjang 18 (e.g., NIM)
     [nama]     VARCHAR (100) NOT NULL,
     [email]    VARCHAR (100) NOT NULL,
-    [password] VARCHAR (100) NOT NULL,
+    [password] VARCHAR (255) NOT NULL,
     [role]     VARCHAR (10)  NOT NULL DEFAULT 'mahasiswa',
     PRIMARY KEY CLUSTERED ([Id_user] ASC)
 );
