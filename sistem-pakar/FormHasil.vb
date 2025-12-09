@@ -1,4 +1,6 @@
-﻿Public Class FormHasil
+﻿Imports System.Drawing.Printing
+
+Public Class FormHasil
     'variabel penampung data skor
     Public dataSkor As Dictionary(Of String, Integer)
 
@@ -10,13 +12,18 @@
     Private gridSkor As DataGridView
     Private buttonTutup As Button
 
+    ' Variabel Print
+    Private buttonPrint As Button
+    Private WithEvents printDoc As New PrintDocument
+    Private printPreview As New PrintPreviewDialog
+
     'variabel untuk grafik
     Private maxSkorGrafik As Integer = 100
 
     Private Sub FormHasil_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'setup form
         Me.Text = "Hasil Analisis Sistem Pakar"
-        Me.Size = New Size(600, 850)
+        Me.Size = New Size(600, 900)
         Me.StartPosition = FormStartPosition.CenterScreen
         Me.BackColor = Color.WhiteSmoke
         Me.FormBorderStyle = FormBorderStyle.FixedSingle
@@ -87,8 +94,21 @@
         'tambah kolom ke tabel
         gridSkor.Columns.Add("colTopik", "Bidang Minat")
         gridSkor.Columns.Add("colSkor", "Total Skor")
-
         Me.Controls.Add(gridSkor)
+
+        ' Tombol Print (BARU)
+        buttonPrint = New Button()
+        buttonPrint.Text = "Cetak / Print"
+        buttonPrint.Size = New Size(150, 45)
+        buttonPrint.BackColor = Color.DodgerBlue
+        buttonPrint.ForeColor = Color.White
+        buttonPrint.FlatStyle = FlatStyle.Flat
+        buttonPrint.FlatAppearance.BorderSize = 0
+        buttonPrint.Font = New Font("Segoe UI", 10, FontStyle.Bold)
+        ' Posisi di kiri bawah
+        buttonPrint.Location = New Point(50, 0)
+        AddHandler buttonPrint.Click, AddressOf ButtonPrint_Click
+        Me.Controls.Add(buttonPrint)
 
         'tombol tutup
         buttonTutup = New Button()
@@ -177,10 +197,30 @@
 
     Sub aturPosisi()
         If labelRekomendasi Is Nothing Then Exit Sub
+
+        ' 1. Posisi Elemen Atas
         labelRekomendasi.Left = (Me.ClientSize.Width - labelRekomendasi.Width) / 2
         panelGrafik.Location = New Point(50, labelRekomendasi.Bottom + 20)
         gridSkor.Location = New Point(50, panelGrafik.Bottom + 20)
-        buttonTutup.Location = New Point((Me.ClientSize.Width - buttonTutup.Width) / 2, gridSkor.Bottom + 30)
+
+        ' 2. Atur Posisi Tombol Berdampingan
+        Dim jarakTombol As Integer = 20
+        Dim yTombol As Integer = gridSkor.Bottom + 30
+
+        ' Hitung total lebar kedua tombol + jarak
+        Dim totalLebar As Integer = buttonPrint.Width + jarakTombol + buttonTutup.Width
+
+        ' Cari titik mulai (X) agar grup tombol ini ada di tengah form
+        Dim startX As Integer = (Me.ClientSize.Width - totalLebar) / 2
+
+        ' Set posisi
+        buttonPrint.Location = New Point(startX, yTombol)
+        buttonTutup.Location = New Point(startX + buttonPrint.Width + jarakTombol, yTombol)
+
+        ' 3. Auto Resize Tinggi Form jika kurang muat
+        If buttonTutup.Bottom + 50 > Me.ClientSize.Height Then
+            Me.ClientSize = New Size(Me.ClientSize.Width, buttonTutup.Bottom + 50)
+        End If
     End Sub
 
     Private Sub panelGrafik_Paint(sender As Object, e As PaintEventArgs)
@@ -255,5 +295,85 @@
 
     Private Sub TombolTutup_Click(sender As Object, e As EventArgs)
         Application.Exit() ' Keluar dari aplikasi
+    End Sub
+
+    Private Sub ButtonPrint_Click(sender As Object, e As EventArgs)
+        printDoc.DocumentName = "Laporan_Sistem_Pakar_" & ModuleDB.NIMSekarang
+        printPreview.Document = printDoc
+
+        ' Maksimalkan jendela preview agar jelas
+        CType(printPreview, Form).WindowState = FormWindowState.Maximized
+        printPreview.ShowDialog()
+    End Sub
+
+    Private Sub printDoc_PrintPage(sender As Object, e As PrintPageEventArgs) Handles printDoc.PrintPage
+        Dim grafik As Graphics = e.Graphics
+        Dim fontHeader As New Font("Segoe UI", 16, FontStyle.Bold)
+        Dim fontSubHeader As New Font("Segoe UI", 12, FontStyle.Regular)
+        Dim fontBold As New Font("Segoe UI", 11, FontStyle.Bold)
+        Dim fontBody As New Font("Segoe UI", 10, FontStyle.Regular)
+
+        Dim marginKiri As Integer = 50
+        Dim yPos As Integer = 50
+        Dim lebarKonten As Integer = e.PageBounds.Width - 100
+
+        'header laporan
+        grafik.DrawString("LAPORAN HASIL ANALISIS MINAT SKRIPSI", fontHeader, Brushes.DarkBlue, marginKiri, yPos)
+        yPos += 40
+        grafik.DrawString("Tanggal Cetak: " & DateTime.Now.ToString("dd MMMM yyyy"), fontBody, Brushes.Black, marginKiri, yPos)
+        yPos += 20
+        grafik.DrawString("NIM Mahasiswa: " & ModuleDB.NIMSekarang, fontSubHeader, Brushes.Black, marginKiri, yPos)
+        yPos += 40
+        grafik.DrawLine(Pens.Black, marginKiri, yPos, e.PageBounds.Width - 50, yPos)
+        yPos += 30
+
+        'hasil rekomendasi
+        grafik.DrawString("Rekomendasi Utama:", fontSubHeader, Brushes.DarkBlue, marginKiri, yPos)
+        yPos += 30
+
+        'gambar teks rekomendasi
+        Dim kotakRekomendasi As New RectangleF(marginKiri, yPos, lebarKonten, 150)
+        grafik.DrawString(labelRekomendasi.Text, fontHeader, Brushes.DodgerBlue, kotakRekomendasi)
+        Dim ukuranTeks As SizeF = grafik.MeasureString(labelRekomendasi.Text, fontHeader, lebarKonten)
+        yPos += CInt(ukuranTeks.Height) + 40
+
+        'gambar grafik
+        grafik.DrawString("Grafik Perbandingan Skor:", fontSubHeader, Brushes.DarkBlue, marginKiri, yPos)
+        yPos += 30
+
+        'buat bitmap dari panelGrafik
+        Dim bitmapGrafik As New Bitmap(panelGrafik.Width, panelGrafik.Height)
+        panelGrafik.DrawToBitmap(bitmapGrafik, New Rectangle(0, 0, panelGrafik.Width, panelGrafik.Height))
+
+        'gambar bitmap ke kertas
+        Dim xGrafik As Integer = marginKiri + (lebarKonten - panelGrafik.Width) / 2
+        grafik.DrawImage(bitmapGrafik, xGrafik, yPos)
+        yPos += panelGrafik.Height + 40
+
+        'tabel detail skor
+        grafik.DrawString("Rincian Skor: ", fontSubHeader, Brushes.DarkBlue, marginKiri, yPos)
+        yPos += 30
+
+        'header tabel
+        grafik.FillRectangle(Brushes.LightGray, marginKiri, yPos, lebarKonten, 30)
+        grafik.DrawRectangle(Pens.Black, marginKiri, yPos, lebarKonten, 30)
+        grafik.DrawString("Bidang Minat", fontBold, Brushes.Black, marginKiri + 10, yPos + 5)
+        grafik.DrawString("Skor", fontBold, Brushes.Black, marginKiri + 400, yPos + 5)
+        yPos += 30
+
+        ' isi tabel
+        For Each row As DataGridViewRow In gridSkor.Rows
+            'garis kotak
+            grafik.DrawRectangle(Pens.Black, marginKiri, yPos, lebarKonten, 30)
+
+            'teks
+            Dim topik As String = row.Cells(0).Value.ToString()
+            Dim skor As String = row.Cells(1).Value.ToString()
+
+            grafik.DrawString(topik, fontBody, Brushes.Black, marginKiri + 10, yPos + 5)
+            grafik.DrawString(skor, fontBody, Brushes.Black, marginKiri + 400, yPos + 5)
+
+            yPos += 30
+        Next
     End Sub
 End Class
