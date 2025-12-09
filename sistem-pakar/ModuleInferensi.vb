@@ -1,55 +1,43 @@
 ﻿Module ModuleInferensi
     'fungsi inferensi menerima input berupa array dan mengeluarkan output berupa string (topik)
-    Public Function cekRekomendasiTopik(jawabanUser As Integer()) As String
+    Public Function cekRekomendasiTopik(jawabanUser As Integer(), dtPertanyaan As DataTable) As String
+
         'validasi input
         If jawabanUser Is Nothing OrElse jawabanUser.Length < 20 Then
             Return "Error: data tidak lengkap"
         End If
 
-        'penampung skor
-        Dim skorTopik As New Dictionary(Of String, Integer) From {
-            {"Rekayasa Perangkat Lunak", 0},
-            {"AI dan Data Science", 0},
-            {"Network dan Security", 0},
-            {"Internet Of Things dan Robotika", 0},
-            {"Multimedia dan Game Development", 0}
-        }
+        'ambil data topik dari database
+        Dim dtTopik As DataTable = ModuleDB.ambilDaftarTopik()
 
-        'penerapan rules mesin inferensi
-        For i As Integer = 0 To 19
+        'dictionary untuk skor topik (key, value)
+        'contoh = {"T01" : (skor)}
+        Dim skorTopik As New Dictionary(Of String, Integer)
+
+        'dictionary untuk menyimpan nama topik (key, value)
+        'contoh = {"T01":"Rekayasa Perangkat Lunak"} 
+        Dim namaTopik As New Dictionary(Of String, String)
+
+        'inisialisasi skor 0 untuk semua topik
+        For Each row As DataRow In dtTopik.Rows
+            Dim id As String = row("Id_topik").ToString()
+            Dim nama As String = row("nama_topik").ToString()
+
+            skorTopik.Add(id, 0)
+            namaTopik.Add(id, nama)
+        Next
+
+        'loop berdasarkan jawaban user
+        For i As Integer = 0 To jawabanUser.Length - 1
+            'jika user jawab "YA"
             If jawabanUser(i) = 1 Then
-                Select Case i
-                    ' === REKAYASA PERANGKAT LUNAK (0-3) ===
-                    Case 0 : skorTopik("Rekayasa Perangkat Lunak") += 20
-                    Case 1 : skorTopik("Rekayasa Perangkat Lunak") += 10
-                    Case 2 : skorTopik("Rekayasa Perangkat Lunak") += 60
-                    Case 3 : skorTopik("Rekayasa Perangkat Lunak") += 10
+                Dim idTopikSoal As String = dtPertanyaan.Rows(i)("Id_topik").ToString()
+                Dim bobotSoal As Integer = Convert.ToInt32(dtPertanyaan.Rows(i)("bobot_pertanyaan"))
 
-                    ' === AI & DATA SCIENCE (4-7) ===
-                    Case 4 : skorTopik("AI dan Data Science") += 20
-                    Case 5 : skorTopik("AI dan Data Science") += 10
-                    Case 6 : skorTopik("AI dan Data Science") += 10
-                    Case 7 : skorTopik("AI dan Data Science") += 60
-
-                    ' === NETWORK & SECURITY (8-11) ===
-                    Case 8 : skorTopik("Network dan Security") += 60
-                    Case 9 : skorTopik("Network dan Security") += 10
-                    Case 10 : skorTopik("Network dan Security") += 20
-                    Case 11 : skorTopik("Network dan Security") += 10
-
-                    ' === IOT & ROBOTIKA (12-15) ===
-                    Case 12 : skorTopik("Internet Of Things dan Robotika") += 10
-                    Case 13 : skorTopik("Internet Of Things dan Robotika") += 20
-                    Case 14 : skorTopik("Internet Of Things dan Robotika") += 10
-                    Case 15 : skorTopik("Internet Of Things dan Robotika") += 60
-
-                    ' === MULTIMEDIA & GAME DEV (16-19) ===
-                    Case 16 : skorTopik("Multimedia dan Game Development") += 10
-                    Case 17 : skorTopik("Multimedia dan Game Development") += 60
-                    Case 18 : skorTopik("Multimedia dan Game Development") += 10
-                    Case 19 : skorTopik("Multimedia dan Game Development") += 20
-
-                End Select
+                'tambahkan bobot ke topik yang sesuai
+                If skorTopik.ContainsKey(idTopikSoal) Then
+                    skorTopik(idTopikSoal) += bobotSoal
+                End If
             End If
         Next
 
@@ -63,9 +51,9 @@
 
         'cari topik dengan skor tertinggi (bisa seri)
         Dim pemenang As New List(Of String)
-        For Each topik In skorTopik
-            If topik.Value = maxSkor Then
-                pemenang.Add(topik.Key)
+        For Each keyValue In skorTopik
+            If keyValue.Value = maxSkor Then
+                pemenang.Add(namaTopik(keyValue.Key))
             End If
         Next
 

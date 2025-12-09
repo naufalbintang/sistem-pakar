@@ -151,7 +151,7 @@
             End If
 
             'kirim array jawabanUser() ke fungsi cekRekomendasiTopik di ModuleInferensi
-            Dim hasilRekomendasi As String = ModuleInferensi.cekRekomendasiTopik(jawabanUser)
+            Dim hasilRekomendasi As String = ModuleInferensi.cekRekomendasiTopik(jawabanUser, dtPertanyaan)
 
             MsgBox("Jawaban anda berhasil disimpan", MsgBoxStyle.Information, "Sukses")
 

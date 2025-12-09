@@ -35,4 +35,22 @@ Module ModuleDB
 
         Return tabelPertanyaan
     End Function
+
+    Public Function ambilDaftarTopik() As DataTable
+        Dim tabelTopik As New DataTable()
+        Try
+            Using conn As SqlConnection = getConnection()
+                conn.Open()
+                Dim query As String = "Select * From Topik"
+                Using cmd As New SqlCommand(query, conn)
+                    Using adapter As New SqlDataAdapter(cmd)
+                        adapter.Fill(tabelTopik)
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            MsgBox("Gagal mengambil data: " & ex.Message)
+        End Try
+        Return tabelTopik
+    End Function
 End Module
