@@ -41,6 +41,18 @@
             End If
         Next
 
-        Return skorTopik
+        Dim hasilAkhir As New Dictionary(Of String, Integer)
+
+        For Each item In skorTopik
+            Dim id As String = item.Key
+            Dim skor As Integer = item.Value
+
+            If namaTopik.ContainsKey(id) Then
+                Dim namaAsli As String = namaTopik(id)
+                hasilAkhir.Add(namaAsli, skor)
+            End If
+        Next
+
+        Return hasilAkhir
     End Function
 End Module

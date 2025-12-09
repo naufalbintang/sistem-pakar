@@ -14,7 +14,7 @@ Public Class FormLogin
             Using conn = ModuleDB.getConnection()
                 conn.Open()
 
-                Dim query = "SELECT password FROM Akun WHERE Id_user = @nim"
+                Dim query = "SELECT Id_user, password FROM Akun WHERE Id_user = @nim"
 
                 Using cmd As New SqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@nim", TextBoxNIM.Text)

@@ -100,14 +100,37 @@
         'urutkan skor
         Dim skorUrut = From entry In dataSkor Order By entry.Value Descending Select entry
 
+        'ambil skor tertinggi
+        Dim maxScore As Integer = skorUrut.First().Value
+
         'tampilkan pemenang
-        Dim juara = skorUrut.First()
-        If juara.Value = 0 Then
+        If maxScore = 0 Then
             labelRekomendasi.Text = "Sepertinya minat anda belum ada."
             labelRekomendasi.ForeColor = Color.Gray
         Else
-            labelRekomendasi.Text = juara.Key.ToUpper()
+            'cari topik apa saja yang memiliki skor = maxScore
+            Dim daftarPemenang As New List(Of String)
+
+            For Each item In skorUrut
+                If item.Value = maxScore Then
+                    daftarPemenang.Add(item.Key.ToUpper())
+                End If
+            Next
+
+            'gabungkan nama-nama pemenang
+            labelRekomendasi.Text = String.Join(vbCrLf & "&" & vbCrLf, daftarPemenang)
+
+            'kecilkan font jika pemenangnya banyak
+            If daftarPemenang.Count > 1 Then
+                labelRekomendasi.Font = New Font("Segoe UI", 16, FontStyle.Bold)
+            Else
+                labelRekomendasi.Font = New Font("Segoe UI", 20, FontStyle.Bold)
+            End If
+
+            labelRekomendasi.ForeColor = Color.DodgerBlue
         End If
+
+
 
         'masukkan ke tabel
         gridSkor.Rows.Clear()
@@ -116,9 +139,16 @@
         Next
 
         'highlight baris pertama (juara)
-        If gridSkor.Rows.Count > 0 AndAlso juara.Value > 0 Then
-            gridSkor.Rows(0).DefaultCellStyle.BackColor = Color.LightCyan
-            gridSkor.Rows(0).DefaultCellStyle.Font = New Font(gridSkor.Font, FontStyle.Bold)
+        If gridSkor.Rows.Count > 0 AndAlso maxScore > 0 Then
+            For Each row As DataGridViewRow In gridSkor.Rows
+                Dim teksSkor As String = row.Cells(1).Value.ToString().Split(" "c)(0)
+                Dim nilaiSkor As Integer = CInt(teksSkor)
+
+                If nilaiSkor = maxScore Then
+                    row.DefaultCellStyle.BackColor = Color.LightCyan
+                    row.DefaultCellStyle.Font = New Font(gridSkor.Font, FontStyle.Bold)
+                End If
+            Next
         End If
     End Sub
 

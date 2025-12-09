@@ -158,6 +158,7 @@
 
             'mengirim data ke FormHasil
             Dim FormHasil As New FormHasil()
+            FormHasil.dataSkor = hasilRekomendasi
             Me.Hide()
             FormHasil.Show()
 
