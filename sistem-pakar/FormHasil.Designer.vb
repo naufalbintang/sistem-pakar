@@ -28,27 +28,27 @@ Partial Class FormHasil
         ' 
         ' Label1
         ' 
-        Label1.AutoSize = True
-        Label1.Font = New Font("Segoe UI", 18.0F)
-        Label1.Location = New Point(87, 177)
+        Label1.Font = New Font("Segoe UI", 18F)
+        Label1.Location = New Point(12, 177)
         Label1.Name = "Label1"
-        Label1.Size = New Size(640, 41)
+        Label1.Size = New Size(776, 41)
         Label1.TabIndex = 0
         Label1.Text = "Rekomendasi Topik Skripsi Untuk Anda Adalah:"
+        Label1.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' LabelHasil
         ' 
-        LabelHasil.AutoSize = True
-        LabelHasil.Font = New Font("Segoe UI", 18.0F)
-        LabelHasil.Location = New Point(348, 232)
+        LabelHasil.Font = New Font("Segoe UI", 18F)
+        LabelHasil.Location = New Point(12, 232)
         LabelHasil.Name = "LabelHasil"
-        LabelHasil.Size = New Size(104, 41)
+        LabelHasil.Size = New Size(776, 41)
         LabelHasil.TabIndex = 1
         LabelHasil.Text = "(topik)"
+        LabelHasil.TextAlign = ContentAlignment.MiddleCenter
         ' 
         ' FormHasil
         ' 
-        AutoScaleDimensions = New SizeF(8.0F, 20.0F)
+        AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(800, 450)
         Controls.Add(LabelHasil)
@@ -56,7 +56,6 @@ Partial Class FormHasil
         Name = "FormHasil"
         Text = "FormHasil"
         ResumeLayout(False)
-        PerformLayout()
     End Sub
 
     Friend WithEvents Label1 As Label
