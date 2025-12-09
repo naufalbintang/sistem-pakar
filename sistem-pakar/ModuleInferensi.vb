@@ -1,10 +1,10 @@
 ﻿Module ModuleInferensi
     'fungsi inferensi menerima input berupa array dan mengeluarkan output berupa string (topik)
-    Public Function cekRekomendasiTopik(jawabanUser As Integer(), dtPertanyaan As DataTable) As String
+    Public Function cekRekomendasiTopik(jawabanUser As Integer(), dtPertanyaan As DataTable) As List(Of String)
 
         'validasi input
         If jawabanUser Is Nothing OrElse jawabanUser.Length < 20 Then
-            Return "Error: data tidak lengkap"
+            Return New List(Of String) From {"Error: Data tidak lengkap"}
         End If
 
         'ambil data topik dari database
@@ -46,7 +46,7 @@
 
         'jika user tidak menjawab "Ya" satupun
         If maxSkor = 0 Then
-            Return "Minat tidak teridentifikasi (Anda menjawab Tidak pada semua pertanyaan)."
+            Return New List(Of String) From {"Minat tidak teridentifikasi (Anda menjawab Tidak pada semua pertanyaan)."}
         End If
 
         'cari topik dengan skor tertinggi (bisa seri)
@@ -57,12 +57,6 @@
             End If
         Next
 
-        'format output string
-        If pemenang.Count = 1 Then
-            Return pemenang(0)
-        Else
-            'jika ada 2 topik dengan skor sama
-            Return String.Join(" & ", pemenang)
-        End If
+        Return pemenang
     End Function
 End Module
