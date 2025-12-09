@@ -12,7 +12,7 @@
     Private Sub FormHasil_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'setup form
         Me.Text = "Hasil Analisis Sistem Pakar"
-        Me.Size = New Size(600, 700)
+        Me.Size = New Size(600, 750)
         Me.StartPosition = FormStartPosition.CenterScreen
         Me.BackColor = Color.WhiteSmoke
 
@@ -49,15 +49,15 @@
         labelRekomendasi.Text = "..."
         labelRekomendasi.Font = New Font("Segoe UI", 20, FontStyle.Bold)
         labelRekomendasi.ForeColor = Color.DodgerBlue
-        labelRekomendasi.AutoSize = False
-        labelRekomendasi.Size = New Size(Me.ClientSize.Width, 80)
+        labelRekomendasi.AutoSize = True
+        labelRekomendasi.MaximumSize = New Size(Me.ClientSize.Width - 40, 0)
         labelRekomendasi.TextAlign = ContentAlignment.MiddleCenter
-        labelRekomendasi.Location = New Point(0, 90)
+        labelRekomendasi.Location = New Point(20, 100)
         Me.Controls.Add(labelRekomendasi)
 
         'label detail skor
         gridSkor = New DataGridView()
-        gridSkor.Location = New Point(50, 190)
+        gridSkor.Location = New Point(50, 250)
         gridSkor.Size = New Size(Me.ClientSize.Width - 100, 300)
         gridSkor.Anchor = AnchorStyles.Top Or AnchorStyles.Bottom Or AnchorStyles.Left Or AnchorStyles.Right
         gridSkor.BackgroundColor = Color.White
@@ -69,7 +69,7 @@
 
         'tambah kolom ke tabel
         gridSkor.Columns.Add("colTopik", "Bidang Minat")
-        gridSkor.Columns.Add("colTopik", "Total Skor")
+        gridSkor.Columns.Add("colSkor", "Total Skor")
 
         Me.Controls.Add(gridSkor)
 
@@ -113,12 +113,12 @@
 
             For Each item In skorUrut
                 If item.Value = maxScore Then
-                    daftarPemenang.Add(item.Key.ToUpper())
+                    daftarPemenang.Add("- " & item.Key.ToUpper())
                 End If
             Next
 
             'gabungkan nama-nama pemenang
-            labelRekomendasi.Text = String.Join(vbCrLf & "&" & vbCrLf, daftarPemenang)
+            labelRekomendasi.Text = String.Join(vbCrLf, daftarPemenang)
 
             'kecilkan font jika pemenangnya banyak
             If daftarPemenang.Count > 1 Then
@@ -129,8 +129,6 @@
 
             labelRekomendasi.ForeColor = Color.DodgerBlue
         End If
-
-
 
         'masukkan ke tabel
         gridSkor.Rows.Clear()
@@ -150,14 +148,29 @@
                 End If
             Next
         End If
+
+        'geser label ke tengah
+        labelRekomendasi.Left = (Me.ClientSize.Width - labelRekomendasi.Width) / 2
+
+        'geser tabel ke bawah label
+        gridSkor.Location = New Point(50, labelRekomendasi.Bottom + 20)
+
+        'menyesuaikan tinggi tabel biar ga nabrak ke tombol
+        Dim sisaTinggi As Integer = buttonTutup.Top - gridSkor.Location.Y - 20
+        gridSkor.Height = Math.Max(150, sisaTinggi)
     End Sub
 
     'membuat layout responsive saat resize
     Private Sub FormHasil_Resize(sender As Object, e As EventArgs) Handles Me.Resize
         If labelJudulUtama IsNot Nothing Then
             labelJudulUtama.Width = Me.ClientSize.Width
-            labelRekomendasi.Width = Me.ClientSize.Width
+            labelRekomendasi.MaximumSize = New Size(Me.ClientSize.Width - 40, 0)
+            labelRekomendasi.Left = (Me.ClientSize.Width - labelRekomendasi.Width) / 2
+            gridSkor.Location = New Point(50, labelRekomendasi.Bottom + 30)
+            gridSkor.Width = Me.ClientSize.Width - 100
             buttonTutup.Location = New Point((Me.ClientSize.Width - buttonTutup.Width) / 2, Me.ClientSize.Height - 80)
+            Dim sisaTinggi As Integer = buttonTutup.Top - gridSkor.Location.Y - 20
+            gridSkor.Height = Math.Max(100, sisaTinggi)
         End If
     End Sub
 

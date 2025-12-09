@@ -152,7 +152,6 @@
 
             'kirim array jawabanUser() ke fungsi cekRekomendasiTopik di ModuleInferensi
             Dim hasilRekomendasi As Dictionary(Of String, Integer) = ModuleInferensi.cekRekomendasiTopik(jawabanUser, dtPertanyaan)
-            Dim hasilText As String = String.Join(vbCrLf, hasilRekomendasi)
 
             MsgBox("Perhitungan selesai! Menampilkan hasil...", MsgBoxStyle.Information, "Sukses")
 
