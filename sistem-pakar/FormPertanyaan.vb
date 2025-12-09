@@ -9,6 +9,9 @@
 
     'saat form dibuka
     Private Sub FormPertanyaan_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'nonresizable
+        Me.FormBorderStyle = FormBorderStyle.FixedSingle
+
         'ambil pertanyaan dari database
         dtPertanyaan = ModuleDB.AmbilSemuaPertanyaan()
 

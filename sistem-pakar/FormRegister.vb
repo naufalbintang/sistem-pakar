@@ -40,4 +40,8 @@ Public Class FormRegister
             MsgBox("Gagal memasukkan data ke database " & ex.Message)
         End Try
     End Sub
+
+    Private Sub FormRegister_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.FormBorderStyle = FormBorderStyle.FixedSingle
+    End Sub
 End Class
