@@ -14,6 +14,10 @@ Module ModuleDB
         Return New SqlConnection(connectionString)
     End Function
 
+    Public NIMSekarang As String = ""
+    Public usernameSekarang As String = ""
+
+
     Public Function AmbilSemuaPertanyaan() As DataTable
         'siapkan tabel kosong
         Dim tabelPertanyaan As New DataTable()

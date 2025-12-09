@@ -21,10 +21,12 @@ Public Class FormLogin
 
                     Using reader As SqlDataReader = cmd.ExecuteReader()
                         If reader.Read() Then
+                            Dim NIMDB As String = reader("Id_user").ToString()
                             Dim passwordDB As String = reader("password").ToString()
 
                             If FormPassword = passwordDB Then
                                 MsgBox("Login berhasil!", MsgBoxStyle.Information, "Sukses")
+                                ModuleDB.NIMSekarang = NIMDB
                                 Dim FormPertanyaan As New FormPertanyaan()
                                 FormPertanyaan.Show()
                                 Me.Hide()

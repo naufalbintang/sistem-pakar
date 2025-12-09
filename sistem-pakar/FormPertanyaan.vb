@@ -151,21 +151,16 @@
             End If
 
             'kirim array jawabanUser() ke fungsi cekRekomendasiTopik di ModuleInferensi
-            Dim hasilRekomendasi As List(Of String) = ModuleInferensi.cekRekomendasiTopik(jawabanUser, dtPertanyaan)
+            Dim hasilRekomendasi As Dictionary(Of String, Integer) = ModuleInferensi.cekRekomendasiTopik(jawabanUser, dtPertanyaan)
             Dim hasilText As String = String.Join(vbCrLf, hasilRekomendasi)
 
-            MsgBox("Jawaban anda berhasil disimpan", MsgBoxStyle.Information, "Sukses")
+            MsgBox("Perhitungan selesai! Menampilkan hasil...", MsgBoxStyle.Information, "Sukses")
 
             'mengirim data ke FormHasil
             Dim FormHasil As New FormHasil()
-            FormHasil.LabelHasil.Text = hasilText
             Me.Hide()
             FormHasil.Show()
 
-            'print hasil hasilRekomendasi
-            For Each item As String In hasilRekomendasi
-                Debug.WriteLine(item)
-            Next
         Else
             halamanSaatIni += 1
             tampilkanHalaman(halamanSaatIni)
