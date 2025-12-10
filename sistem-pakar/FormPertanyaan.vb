@@ -156,16 +156,33 @@
             'kirim array jawabanUser() ke fungsi cekRekomendasiTopik di ModuleInferensi
             Dim hasilRekomendasi As Dictionary(Of String, Integer) = ModuleInferensi.cekRekomendasiTopik(jawabanUser, dtPertanyaan)
 
-            MsgBox("Perhitungan selesai! Menampilkan hasil...", MsgBoxStyle.Information, "Sukses")
+            'tentukan juara 1 untuk disimpan ke database
+            Dim juaraPertama As String = ""
+            If hasilRekomendasi.Count > 0 Then
+                juaraPertama = hasilRekomendasi.OrderByDescending(Function(x) x.Value).First().Key
 
-            'mengirim data ke FormHasil
+                'jika skornya 0 semua, jangan simpan juara
+                If hasilRekomendasi(juaraPertama) = 0 Then
+                    juaraPertama = ""
+                End If
+            End If
+
+            'simpan ke database
+            Try
+                ModuleDB.simpanHasilKonsultasi(ModuleDB.NIMSekarang, jawabanUser, dtPertanyaan, juaraPertama)
+                MsgBox("Jawaban dan hasil analisis berhasil disimpan ke database!", MsgBoxStyle.Information, "Sukses")
+            Catch ex As Exception
+                MsgBox("Peringatan: Data gagal disimpan ke database, tapi hasil tetap akan ditampilkan." & vbCrLf & ex.Message, MsgBoxStyle.Exclamation)
+            End Try
+
+            'buka FormHasil
             Dim FormHasil As New FormHasil()
             FormHasil.dataSkor = hasilRekomendasi
             Me.Hide()
             FormHasil.Show()
 
         Else
-            halamanSaatIni += 1
+                halamanSaatIni += 1
             tampilkanHalaman(halamanSaatIni)
         End If
 
