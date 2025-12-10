@@ -97,8 +97,8 @@ Module ModuleDB
 
                 Using cmdJawab As New SqlCommand(queryJawab, conn, trans)
                     cmdJawab.Parameters.Add(New SqlParameter("@idKonsultasi", SqlDbType.Int))
-                    cmdJawab.Parameters.Add(New SqlParameter("@idPertanyaan", SqlDbType.Char))
-                    cmdJawab.Parameters.Add(New SqlParameter("@jawaban", SqlDbType.VarChar))
+                    cmdJawab.Parameters.Add(New SqlParameter("@idPertanyaan", SqlDbType.Char, 4))
+                    cmdJawab.Parameters.Add(New SqlParameter("@jawaban", SqlDbType.VarChar, 10))
 
                     'loop semua jawaban user
                     For i As Integer = 0 To jawabanUser.Length - 1
@@ -107,9 +107,9 @@ Module ModuleDB
                         Dim teksJawaban As String = If(jawabanUser(i) = 1, "Ya", "Tidak")
 
                         'set nilai parameter
-                        cmdJawab.Parameters("idKonsultasi").Value = idKonsultasiBaru
-                        cmdJawab.Parameters("idPertanyaan").Value = idPertanyaan
-                        cmdJawab.Parameters("jawaban").Value = teksJawaban
+                        cmdJawab.Parameters("@idKonsultasi").Value = idKonsultasiBaru
+                        cmdJawab.Parameters("@idPertanyaan").Value = idPertanyaan
+                        cmdJawab.Parameters("@jawaban").Value = teksJawaban
 
                         'eksekusi per baris
                         cmdJawab.ExecuteNonQuery()
