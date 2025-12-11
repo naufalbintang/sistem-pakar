@@ -14,7 +14,7 @@ Public Class FormLogin
             Using conn = ModuleDB.getConnection()
                 conn.Open()
 
-                Dim query = "SELECT Id_user, password FROM Akun WHERE Id_user = @nim"
+                Dim query = "SELECT Id_user, password, role FROM Akun WHERE Id_user = @nim"
 
                 Using cmd As New SqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@nim", TextBoxNIM.Text)
@@ -23,12 +23,18 @@ Public Class FormLogin
                         If reader.Read() Then
                             Dim NIMDB As String = reader("Id_user").ToString()
                             Dim passwordDB As String = reader("password").ToString()
+                            Dim roleDB As String = reader("role").ToString()
 
                             If FormPassword = passwordDB Then
                                 MsgBox("Login berhasil!", MsgBoxStyle.Information, "Sukses")
                                 ModuleDB.NIMSekarang = NIMDB
-                                Dim FormPertanyaan As New FormPertanyaan()
-                                FormPertanyaan.Show()
+                                If roleDB = "admin" Then
+                                    Dim formAdmin As New FormAdmin()
+                                    formAdmin.Show()
+                                Else
+                                    Dim FormPertanyaan As New FormPertanyaan()
+                                    FormPertanyaan.Show()
+                                End If
                                 Me.Hide()
                             Else
                                 MsgBox("Password salah!", MsgBoxStyle.Critical, "Gagal")

@@ -145,7 +145,7 @@ Public Class FormAdmin
         buttonAdd = buatTombolCRUD("ADD NEW", New Point(350, 150))
         buttonUpdate = buatTombolCRUD("UPDATE", New Point(480, 150))
         buttonDelete = buatTombolCRUD("DELETE", New Point(350, 200))
-        buttonClear = buatTombolCRUD("CLEAR", New Point(350, 150))
+        buttonClear = buatTombolCRUD("CLEAR", New Point(480, 200))
 
         panelKonten.Controls.Add(panelFormInput)
     End Sub
@@ -243,7 +243,7 @@ Public Class FormAdmin
     'logika CRUD
     Private Sub buttonAdd_Click(sender As Object, e As EventArgs) Handles buttonAdd.Click
         If menuAktif <> "USER" Then Return
-        If textId.Text = "" Or textNama.Text = "" Or textEmail.Text = "" Or comboRole.Text = "" Then
+        If textId.Text = "" Or textNama.Text = "" Or textEmail.Text = "" Or textPassword.Text = "" Or comboRole.Text = "" Then
             MsgBox("Mohon lengkapi semua data!", MsgBoxStyle.Exclamation)
             Return
         End If
@@ -258,6 +258,7 @@ Public Class FormAdmin
                     cmd.Parameters.AddWithValue("@email", textEmail.Text)
                     If textPassword.Text = "" Then
                         MsgBox("Password harus diisi untuk user baru!", MsgBoxStyle.Exclamation)
+                        Return
                     End If
                     cmd.Parameters.AddWithValue("@password", HashPassword.HashPassword(textPassword.Text))
                     cmd.Parameters.AddWithValue("@role", comboRole.Text)
@@ -280,7 +281,7 @@ Public Class FormAdmin
                 conn.Open()
                 Dim query As String = ""
                 If textPassword.Text = "" Then
-                    query = "UPDATE Akun SET nama=@nama, email=@email, role=@role, WHERE Id_user=@idUser"
+                    query = "UPDATE Akun SET nama=@nama, email=@email, role=@role WHERE Id_user=@idUser"
                 Else
                     query = "UPDATE Akun SET nama=@nama, email=@email, role=@role, password=@password WHERE Id_user=@idUser"
                 End If
@@ -310,9 +311,24 @@ Public Class FormAdmin
             Try
                 Using conn = ModuleDB.getConnection()
                     conn.Open()
-                    Dim query As String = "DELETE FROM akun WHERE Id_user=@idUser"
-                    Using cmd As New SqlCommand(query, conn)
-                        cmd.Parameters.AddWithValue("idUser", textId)
+                    'hapus data di tabel Jawaban_Mhs
+                    Dim queryJawaban As String = "DELETE FROM Jawaban_Mhs WHERE Id_konsultasi IN (SELECT Id_konsultasi FROM Konsultasi WHERE Id_user=@idUser)"
+                    Using cmd As New SqlCommand(queryJawaban, conn)
+                        cmd.Parameters.AddWithValue("@idUser", textId.Text)
+                        cmd.ExecuteNonQuery()
+                    End Using
+
+                    'hapus data terkait konsultasi
+                    Dim queryKonsultasi As String = "DELETE FROM Konsultasi WHERE Id_user=@idUser"
+                    Using cmd As New SqlCommand(queryKonsultasi, conn)
+                        cmd.Parameters.AddWithValue("@idUser", textId.Text)
+                        cmd.ExecuteNonQuery()
+                    End Using
+
+                    'hapus akun
+                    Dim queryAkun As String = "DELETE FROM akun WHERE Id_user=@idUser"
+                    Using cmd As New SqlCommand(queryAkun, conn)
+                        cmd.Parameters.AddWithValue("idUser", textId.Text)
                         cmd.ExecuteNonQuery()
                     End Using
                 End Using
