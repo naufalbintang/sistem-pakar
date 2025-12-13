@@ -31,9 +31,11 @@ Public Class FormLogin
                                 If roleDB = "admin" Then
                                     Dim formAdmin As New FormAdmin()
                                     formAdmin.Show()
+                                    Me.Hide()
                                 Else
                                     Dim FormPertanyaan As New FormPertanyaan()
                                     FormPertanyaan.Show()
+                                    Me.Hide()
                                 End If
                                 Me.Hide()
                             Else

@@ -125,69 +125,69 @@ INSERT INTO Topik(Id_topik, nama_topik) VALUES ('T05', 'Multimedia dan Game Deve
 -- ==========================
 -- === 1. TOPIK: REKAYASA PERANGKAT LUNAK (T01) ===
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P001', 'Apakah Anda menikmati proses merancang alur sistem (flowchart/UML) dan desain database (ERD) sebelum memulai coding?', 20, 'T01');
+VALUES ('P001', 'Apakah Anda menikmati proses merancang alur sistem (flowchart/UML) dan desain database (ERD) sebelum memulai coding?', 0.2, 'T01');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P002', 'Apakah Anda tertarik membangun aplikasi yang memiliki user interface visual (Web/Mobile)?', 10, 'T01');
+VALUES ('P002', 'Apakah Anda tertarik membangun aplikasi yang memiliki user interface visual (Web/Mobile)?', 0.1, 'T01');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P003', 'Apakah Anda menguasai konsep CRUD (Create, Read, Update, Delete) dalam coding?', 60, 'T01');
+VALUES ('P003', 'Apakah Anda menguasai konsep CRUD (Create, Read, Update, Delete) dalam coding?', 0.6, 'T01');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P004', 'Apakah Anda lebih suka melihat hasil coding yang langsung terlihat bentuk fisiknya (tombol/form)?', 10, 'T01');
+VALUES ('P004', 'Apakah Anda lebih suka melihat hasil coding yang langsung terlihat bentuk fisiknya (tombol/form)?', 0.1, 'T01');
 
 
 -- === 2. TOPIK: AI & DATA SCIENCE (T02) ===
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P005', 'Apakah Anda menyukai mata kuliah yang melibatkan banyak logika matematika dan statistika?', 20, 'T02');
+VALUES ('P005', 'Apakah Anda menyukai mata kuliah yang melibatkan banyak logika matematika dan statistika?', 0.2, 'T02');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P006', 'Apakah Anda tertarik membuat sistem yang bisa belajar sendiri (Machine Learning) dari data masa lalu?', 10, 'T02');
+VALUES ('P006', 'Apakah Anda tertarik membuat sistem yang bisa belajar sendiri (Machine Learning) dari data masa lalu?', 0.1, 'T02');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P007', 'Apakah Anda lebih menikmati mengolah data mentah mencari pola daripada mendesain tampilan?', 10, 'T02');
+VALUES ('P007', 'Apakah Anda lebih menikmati mengolah data mentah mencari pola daripada mendesain tampilan?', 0.1, 'T02');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P008', 'Apakah Anda familiar dengan library pengolahan data seperti Pandas, Scikit-Learn, atau TensorFlow?', 60, 'T02');
+VALUES ('P008', 'Apakah Anda familiar dengan library pengolahan data seperti Pandas, Scikit-Learn, atau TensorFlow?', 0.6, 'T02');
 
 
 -- === 3. TOPIK: NETWORK & SECURITY (T03) ===
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P009', 'Apakah Anda lebih suka mengkonfigurasi server, router, dan IP address daripada coding aplikasi?', 60, 'T03');
+VALUES ('P009', 'Apakah Anda lebih suka mengkonfigurasi server, router, dan IP address daripada coding aplikasi?', 0.6, 'T03');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P010', 'Apakah Anda tertarik dengan isu keamanan siber, hacking, dan cara memproteksi sistem?', 10, 'T03');
+VALUES ('P010', 'Apakah Anda tertarik dengan isu keamanan siber, hacking, dan cara memproteksi sistem?', 0.1, 'T03');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P011', 'Apakah Anda nyaman bekerja menggunakan layar hitam (Terminal/CLI) tanpa tampilan grafis?', 20, 'T03');
+VALUES ('P011', 'Apakah Anda nyaman bekerja menggunakan layar hitam (Terminal/CLI) tanpa tampilan grafis?', 0.2, 'T03');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P012', 'Apakah Anda penasaran bagaimana protokol data dikirimkan melalui jaringan internet?', 10, 'T03');
+VALUES ('P012', 'Apakah Anda penasaran bagaimana protokol data dikirimkan melalui jaringan internet?', 0.1, 'T03');
 
 
 -- === 4. TOPIK: IOT & ROBOTIKA (T04) ===
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P013', 'Apakah Anda tertarik menggabungkan kode program dengan perangkat keras fisik (sensor/lampu)?', 10, 'T04');
+VALUES ('P013', 'Apakah Anda tertarik menggabungkan kode program dengan perangkat keras fisik (sensor/lampu)?', 0.1, 'T04');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P014', 'Apakah Anda tidak keberatan berurusan dengan kabel, komponen elektronik, atau menyolder?', 20, 'T04');
+VALUES ('P014', 'Apakah Anda tidak keberatan berurusan dengan kabel, komponen elektronik, atau menyolder?', 0.2, 'T04');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P015', 'Apakah Anda ingin membuat sistem kendali peralatan rumah tangga jarak jauh (Smart Home)?', 10, 'T04');
+VALUES ('P015', 'Apakah Anda ingin membuat sistem kendali peralatan rumah tangga jarak jauh (Smart Home)?', 0.1, 'T04');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P016', 'Apakah Anda pernah/mau belajar memprogram mikrokontroler (Arduino, ESP32, Raspberry Pi)?', 60, 'T04');
+VALUES ('P016', 'Apakah Anda pernah/mau belajar memprogram mikrokontroler (Arduino, ESP32, Raspberry Pi)?', 0.6, 'T04');
 
 
 -- === 5. TOPIK: MULTIMEDIA & GAME DEV (T05) ===
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P017', 'Apakah Anda memiliki ketertarikan tinggi pada desain grafis, animasi, atau aset visual 3D?', 10, 'T05');
+VALUES ('P017', 'Apakah Anda memiliki ketertarikan tinggi pada desain grafis, animasi, atau aset visual 3D?', 0.1, 'T05');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P018', 'Apakah Anda tertarik logika fisika komputer (gravitasi/tumbukan) untuk simulasi game?', 60, 'T05');
+VALUES ('P018', 'Apakah Anda tertarik logika fisika komputer (gravitasi/tumbukan) untuk simulasi game?', 0.6, 'T05');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P019', 'Apakah Anda ingin membuat aplikasi Augmented Reality (AR) atau Virtual Reality (VR)?', 10, 'T05');
+VALUES ('P019', 'Apakah Anda ingin membuat aplikasi Augmented Reality (AR) atau Virtual Reality (VR)?', 0.1, 'T05');
 
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
-VALUES ('P020', 'Apakah Anda tertarik mengutak-atik Game Engine (Unity/Unreal) dan membuat script gameplay?', 20, 'T05');
+VALUES ('P020', 'Apakah Anda tertarik mengutak-atik Game Engine (Unity/Unreal) dan membuat script gameplay?', 0.1, 'T05');
