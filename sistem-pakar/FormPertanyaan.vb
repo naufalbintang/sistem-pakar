@@ -154,7 +154,7 @@
             End If
 
             'kirim array jawabanUser() ke fungsi cekRekomendasiTopik di ModuleInferensi
-            Dim hasilRekomendasi As Dictionary(Of String, Integer) = ModuleInferensi.cekRekomendasiTopik(jawabanUser, dtPertanyaan)
+            Dim hasilRekomendasi As Dictionary(Of String, Double) = ModuleInferensi.cekRekomendasiTopik(jawabanUser, dtPertanyaan)
 
             'tentukan juara 1 untuk disimpan ke database
             Dim juaraPertama As String = ""

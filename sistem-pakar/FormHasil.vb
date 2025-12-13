@@ -2,7 +2,7 @@
 
 Public Class FormHasil
     'variabel penampung data skor
-    Public dataSkor As Dictionary(Of String, Integer)
+    Public dataSkor As Dictionary(Of String, Double)
 
     'variabel kontrol ui
     Private labelHeaderNIM As Label
@@ -18,7 +18,7 @@ Public Class FormHasil
     Private printPreview As New PrintPreviewDialog
 
     'variabel untuk grafik
-    Private maxSkorGrafik As Integer = 100
+    Private maxSkorGrafik As Double = 100.0
 
     Private Sub FormHasil_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'setup form
@@ -136,13 +136,13 @@ Public Class FormHasil
 
         'cari max skor untuk grafik
         maxSkorGrafik = dataSkor.Values.Max()
-        If maxSkorGrafik = 0 Then maxSkorGrafik = 100
+        If maxSkorGrafik = 0 Then maxSkorGrafik = 100.0
 
         'urutkan skor
         Dim skorUrut = From entry In dataSkor Order By entry.Value Descending Select entry
 
         'ambil skor tertinggi
-        Dim maxScore As Integer = skorUrut.First().Value
+        Dim maxScore As Double = skorUrut.First().Value
 
         'tampilkan pemenang
         If maxScore = 0 Then
@@ -174,7 +174,7 @@ Public Class FormHasil
         'masukkan ke tabel
         gridSkor.Rows.Clear()
         For Each item In skorUrut
-            gridSkor.Rows.Add(item.Key, item.Value & " Poin")
+            gridSkor.Rows.Add(item.Key, item.Value.ToString() & " Poin")
         Next
 
         'highlight baris pertama (juara)
@@ -247,10 +247,10 @@ Public Class FormHasil
 
         'loop gambar batang
         For Each keyValue In dataSkor
-            Dim skor As Integer = keyValue.Value
+            Dim skor As Double = keyValue.Value
             'hitung tinggi batang berdasarkan persentase terhadap skor tertinggi
-            Dim faktorSkala As Double = 120
-            If maxSkorGrafik > 120 Then faktorSkala = maxSkorGrafik
+            Dim faktorSkala As Double = maxSkorGrafik
+            If faktorSkala = 0 Then faktorSkala = 100
 
             Dim tinggiBatang As Integer = CInt((skor / faktorSkala) * tinggiGrafik)
 

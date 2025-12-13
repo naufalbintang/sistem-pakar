@@ -1,6 +1,6 @@
 ﻿Module ModuleInferensi
     'fungsi inferensi menerima input berupa array dan mengeluarkan output berupa string (topik)
-    Public Function cekRekomendasiTopik(jawabanUser As Integer(), dtPertanyaan As DataTable) As Dictionary(Of String, Integer)
+    Public Function cekRekomendasiTopik(jawabanUser As Integer(), dtPertanyaan As DataTable) As Dictionary(Of String, Double)
 
         'validasi input
         If jawabanUser Is Nothing OrElse jawabanUser.Length < 20 Then
@@ -12,7 +12,7 @@
 
         'dictionary untuk skor topik (key, value)
         'contoh = {"T01" : (skor)}
-        Dim skorTopik As New Dictionary(Of String, Integer)
+        Dim skorTopik As New Dictionary(Of String, Double)
 
         'dictionary untuk menyimpan nama topik (key, value)
         'contoh = {"T01":"Rekayasa Perangkat Lunak"} 
@@ -32,7 +32,7 @@
             'jika user jawab "YA"
             If jawabanUser(i) = 1 Then
                 Dim idTopikSoal As String = dtPertanyaan.Rows(i)("Id_topik").ToString()
-                Dim bobotSoal As Integer = Convert.ToInt32(dtPertanyaan.Rows(i)("bobot_pertanyaan"))
+                Dim bobotSoal As Double = Convert.ToInt32(dtPertanyaan.Rows(i)("bobot_pertanyaan"))
 
                 'tambahkan bobot ke topik yang sesuai
                 If skorTopik.ContainsKey(idTopikSoal) Then
@@ -41,7 +41,7 @@
             End If
         Next
 
-        Dim hasilAkhir As New Dictionary(Of String, Integer)
+        Dim hasilAkhir As New Dictionary(Of String, Double)
 
         For Each item In skorTopik
             Dim id As String = item.Key
