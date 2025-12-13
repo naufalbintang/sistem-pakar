@@ -51,7 +51,7 @@ Public Class FormAdmin
         loadDataUser()
     End Sub
 
-    Sub buatTampilan()
+    Private Sub buatTampilan()
         'header
         panelHeader = New Panel()
         panelHeader.Dock = DockStyle.Top

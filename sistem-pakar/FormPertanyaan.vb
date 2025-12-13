@@ -32,7 +32,7 @@
     End Sub
 
     'render halaman
-    Sub tampilkanHalaman(halaman As Integer)
+    Private Sub tampilkanHalaman(halaman As Integer)
         'hapus semua kontrol dalam panel
         PanelPertanyaan.Controls.Clear()
 
@@ -106,7 +106,7 @@
     End Sub
 
     'simpan jawaban sementara
-    Sub simpanJawabanSementara()
+    Private Sub simpanJawabanSementara()
         'cek satu per satu group box yang tampil
         For Each groupBox As Control In PanelPertanyaan.Controls
             If TypeOf groupBox Is GroupBox Then
@@ -127,7 +127,7 @@
                 'simpan ke array global
                 If radioButtonYa IsNot Nothing AndAlso radioButtonYa.Checked Then
                     jawabanUser(indexSoal) = 1
-                ElseIf radioButtonTidak IsNot Nothing AndAlso radioButtonTidak.checked Then
+                ElseIf radioButtonTidak IsNot Nothing AndAlso radioButtonTidak.Checked Then
                     jawabanUser(indexSoal) = 0
                 End If
             End If
