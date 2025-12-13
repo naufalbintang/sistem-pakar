@@ -287,10 +287,10 @@ Public Class FormAdmin
                 End If
 
                 Using cmd As New SqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("idUser", textId.Text)
-                    cmd.Parameters.AddWithValue("nama", textNama.Text)
-                    cmd.Parameters.AddWithValue("email", textEmail.Text)
-                    cmd.Parameters.AddWithValue("role", comboRole.Text)
+                    cmd.Parameters.AddWithValue("@idUser", textId.Text)
+                    cmd.Parameters.AddWithValue("@nama", textNama.Text)
+                    cmd.Parameters.AddWithValue("@email", textEmail.Text)
+                    cmd.Parameters.AddWithValue("@role", comboRole.Text)
                     If textPassword.Text <> "" Then
                         cmd.Parameters.AddWithValue("@password", HashPassword.HashPassword(textPassword.Text))
                     End If
@@ -328,7 +328,7 @@ Public Class FormAdmin
                     'hapus akun
                     Dim queryAkun As String = "DELETE FROM akun WHERE Id_user=@idUser"
                     Using cmd As New SqlCommand(queryAkun, conn)
-                        cmd.Parameters.AddWithValue("idUser", textId.Text)
+                        cmd.Parameters.AddWithValue("@idUser", textId.Text)
                         cmd.ExecuteNonQuery()
                     End Using
                 End Using
@@ -383,5 +383,9 @@ Public Class FormAdmin
         Dim login As New FormLogin()
         login.Show()
         Me.Close()
+    End Sub
+
+    Private Sub FormAdmin_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        Application.Exit()
     End Sub
 End Class

@@ -376,4 +376,8 @@ Public Class FormHasil
             yPos += 30
         Next
     End Sub
+
+    Private Sub FormHasil_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        Application.Exit()
+    End Sub
 End Class
