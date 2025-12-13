@@ -174,7 +174,7 @@ Public Class FormHasil
         'masukkan ke tabel
         gridSkor.Rows.Clear()
         For Each item In skorUrut
-            gridSkor.Rows.Add(item.Key, item.Value.ToString() & " Poin")
+            gridSkor.Rows.Add(item.Key, item.Value.ToString("F1") & " Poin")
         Next
 
         'highlight baris pertama (juara)
@@ -272,7 +272,7 @@ Public Class FormHasil
 
 
             'gambar skor di atas batang
-            Dim textSkor As String = skor.ToString()
+            Dim textSkor As String = skor.ToString("F1")
             Dim fontSkor As New Font("Segoe UI", 9, FontStyle.Bold)
             Dim sizeSkor As SizeF = grafik.MeasureString(textSkor, fontSkor)
             grafik.DrawString(textSkor, fontSkor, Brushes.Black, rectX + (lebarBatang - sizeSkor.Width) / 2, rectY - 20)

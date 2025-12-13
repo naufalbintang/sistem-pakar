@@ -32,7 +32,7 @@
             'jika user jawab "YA"
             If jawabanUser(i) = 1 Then
                 Dim idTopikSoal As String = dtPertanyaan.Rows(i)("Id_topik").ToString()
-                Dim bobotSoal As Double = Convert.ToInt32(dtPertanyaan.Rows(i)("bobot_pertanyaan"))
+                Dim bobotSoal As Double = Convert.ToDouble(dtPertanyaan.Rows(i)("bobot_pertanyaan"))
 
                 'tambahkan bobot ke topik yang sesuai
                 If skorTopik.ContainsKey(idTopikSoal) Then
@@ -45,7 +45,7 @@
 
         For Each item In skorTopik
             Dim id As String = item.Key
-            Dim skor As Integer = item.Value
+            Dim skor As Double = item.Value
 
             If namaTopik.ContainsKey(id) Then
                 Dim namaAsli As String = namaTopik(id)
