@@ -10,20 +10,16 @@
         'ambil data topik dari database
         Dim dtTopik As DataTable = ModuleDB.ambilDaftarTopik()
 
-        'dictionary untuk skor topik (key, value)
-        'contoh = {"T01" : (skor)}
-        Dim skorTopik As New Dictionary(Of String, Double)
-
-        'dictionary untuk menyimpan nama topik (key, value)
-        'contoh = {"T01":"Rekayasa Perangkat Lunak"} 
+        'dictionary untuk simpan CF Combine tiap topik
+        'key = ID topik, value = nilai keyakinan (0.0 - 1.0)
+        Dim cfTopik As New Dictionary(Of String, Double)
         Dim namaTopik As New Dictionary(Of String, String)
 
         'inisialisasi skor 0 untuk semua topik
         For Each row As DataRow In dtTopik.Rows
             Dim id As String = row("Id_topik").ToString()
             Dim nama As String = row("nama_topik").ToString()
-
-            skorTopik.Add(id, 0)
+            cfTopik.Add(id, 0.0)
             namaTopik.Add(id, nama)
         Next
 
@@ -34,16 +30,27 @@
                 Dim idTopikSoal As String = dtPertanyaan.Rows(i)("Id_topik").ToString()
                 Dim bobotSoal As Double = Convert.ToDouble(dtPertanyaan.Rows(i)("bobot_pertanyaan"))
 
-                'tambahkan bobot ke topik yang sesuai
-                If skorTopik.ContainsKey(idTopikSoal) Then
-                    skorTopik(idTopikSoal) += bobotSoal
+                'ambil nilai CF pakar dari database
+                Dim cfPakar As Double = Convert.ToDouble(dtPertanyaan.Rows(i)("bobot_pertanyaan"))
+
+                'mencari CF Gejala
+                Dim cfUser As Double = 1.0 'user yakin menjawab YA
+                Dim cfGejala As Double = cfPakar * cfUser
+
+                'rumus kombinasi CF -> cfBaru = cfLama + cfGejala * (1 - cfLama)
+                If cfTopik.ContainsKey(idTopikSoal) Then
+                    Dim cfLama As Double = cfTopik(idTopikSoal)
+                    Dim cfBaru As Double = cfLama + cfGejala * (1 - cfLama)
+
+                    'update nilai
+                    cfTopik(idTopikSoal) = cfBaru
                 End If
             End If
         Next
 
         Dim hasilAkhir As New Dictionary(Of String, Double)
 
-        For Each item In skorTopik
+        For Each item In cfTopik
             Dim id As String = item.Key
             Dim skor As Double = item.Value
 
