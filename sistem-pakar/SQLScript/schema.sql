@@ -111,7 +111,12 @@ DELETE FROM [dbo].[Topik];
 
 
 -- =======================
--- 3.1 Insert Tabel Topik
+-- 3.2 Insert Tabel Akun
+-- =======================
+INSERT INTO Akun(Id_user, nama, email, password, role) VALUES('111', 'Admin', 'admin@gmail.com', '27aa85d9579166a014c206c41971b23eadb20ac6a42aca4a88f7e64cf25fa6a2', 'admin')
+
+-- =======================
+-- 3.2 Insert Tabel Topik
 -- =======================
 INSERT INTO Topik(Id_topik, nama_topik) VALUES ('T01', 'Rekayasa Perangkat Lunak');
 INSERT INTO Topik(Id_topik, nama_topik) VALUES ('T02', 'AI dan Data Science');
@@ -121,7 +126,7 @@ INSERT INTO Topik(Id_topik, nama_topik) VALUES ('T05', 'Multimedia dan Game Deve
 
 
 -- ==========================
--- 3.2 Insert Tabel Pertanyaan
+-- 3.3 Insert Tabel Pertanyaan
 -- ==========================
 -- === 1. TOPIK: REKAYASA PERANGKAT LUNAK (T01) ===
 INSERT INTO Pertanyaan (Id_pertanyaan, teks_pertanyaan, bobot_pertanyaan, Id_topik) 
