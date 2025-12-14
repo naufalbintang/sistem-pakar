@@ -181,16 +181,29 @@ Public Class FormRegister
 
             Using conn = ModuleDB.getConnection()
                 conn.Open()
-                Dim query As String = "INSERT INTO Akun(Id_user, nama, email, password) VALUES(@idUser, @nama, @email, @password)"
-                Using cmd As New SqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("@idUser", idUser)
-                    cmd.Parameters.AddWithValue("@nama", nama)
-                    cmd.Parameters.AddWithValue("@email", email)
-                    cmd.Parameters.AddWithValue("@password", passwordHash)
-                    cmd.ExecuteNonQuery()
+
+                'cek apakah id sudah terpakai
+                Dim queryCek As String = "SELECT COUNT(*) FROM Akun WHERE Id_user = @id"
+                Using cmdCek As New SqlCommand(queryCek, conn)
+                    cmdCek.Parameters.AddWithValue("@id", idUser)
+                    Dim jumlah As Integer = Convert.ToInt32(cmdCek.ExecuteScalar())
+
+                    If jumlah > 0 Then
+                        MsgBox("NIM / ID User ini sudah terdaftar! Silakan gunakan ID lain atau Login.", MsgBoxStyle.Critical, "Gagal Daftar")
+                        Return
+                    End If
                 End Using
-            End Using
-            MsgBox("Registrasi berhasil! Silakan login.", MsgBoxStyle.Information, "Sukses")
+
+                Dim query As String = "INSERT INTO Akun(Id_user, nama, email, password) VALUES(@idUser, @nama, @email, @password)"
+                    Using cmd As New SqlCommand(query, conn)
+                        cmd.Parameters.AddWithValue("@idUser", idUser)
+                        cmd.Parameters.AddWithValue("@nama", nama)
+                        cmd.Parameters.AddWithValue("@email", email)
+                        cmd.Parameters.AddWithValue("@password", passwordHash)
+                        cmd.ExecuteNonQuery()
+                    End Using
+                End Using
+                MsgBox("Registrasi berhasil! Silakan login.", MsgBoxStyle.Information, "Sukses")
             Me.Close()
         Catch ex As Exception
             MsgBox("Gagal menyimpan data: " & ex.Message, MsgBoxStyle.Critical)
