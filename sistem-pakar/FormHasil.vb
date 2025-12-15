@@ -113,7 +113,7 @@ Public Class FormHasil
         'tombol tutup
         buttonTutup = New Button()
         buttonTutup.Text = "Tutup/Selesai"
-        buttonTutup.Size = New Size(200, 40)
+        buttonTutup.Size = New Size(200, 45)
         buttonTutup.Location = New Point((Me.ClientSize.Width - 200) / 2, 520)
         buttonTutup.BackColor = Color.IndianRed
         buttonTutup.ForeColor = Color.White
@@ -174,7 +174,7 @@ Public Class FormHasil
         'masukkan ke tabel
         gridSkor.Rows.Clear()
         For Each item In skorUrut
-            gridSkor.Rows.Add(item.Key, item.Value.ToString("F1") & " Poin")
+            gridSkor.Rows.Add(item.Key, item.Value.ToString("F2") & " Poin")
         Next
 
         'highlight baris pertama (juara)
@@ -272,7 +272,7 @@ Public Class FormHasil
 
 
             'gambar skor di atas batang
-            Dim textSkor As String = skor.ToString("F1")
+            Dim textSkor As String = skor.ToString("F2")
             Dim fontSkor As New Font("Segoe UI", 9, FontStyle.Bold)
             Dim sizeSkor As SizeF = grafik.MeasureString(textSkor, fontSkor)
             grafik.DrawString(textSkor, fontSkor, Brushes.Black, rectX + (lebarBatang - sizeSkor.Width) / 2, rectY - 20)

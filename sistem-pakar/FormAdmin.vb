@@ -396,7 +396,7 @@ Public Class FormAdmin
     Private Sub buttonLogout_Click(sender As Object, e As EventArgs) Handles buttonLogout.Click
         Dim login As New FormLogin()
         login.Show()
-        Me.Close()
+        Me.Hide()
     End Sub
 
     Private Sub FormAdmin_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed

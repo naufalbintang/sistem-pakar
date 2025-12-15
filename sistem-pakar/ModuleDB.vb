@@ -2,22 +2,17 @@
 Imports Microsoft.IdentityModel.Protocols.OpenIdConnect
 
 Module ModuleDB
-    Public ReadOnly Property connectionString As String
-        Get
-            Return "Data Source=(LocalDB)\MSSQLLocalDB;" &
+    Dim connectionString As String = "Data Source=(LocalDB)\MSSQLLocalDB;" &
                 "AttachDbFilename=|DataDirectory|\sistem-pakar.mdf;" &
                 "Integrated Security=True;" &
                 "Connect Timeout=30"
-        End Get
-    End Property
 
     Public Function getConnection() As SqlConnection
         Return New SqlConnection(connectionString)
     End Function
 
+    'nim dari akun yang sedang aktif
     Public NIMSekarang As String = ""
-    Public usernameSekarang As String = ""
-
 
     Public Function AmbilSemuaPertanyaan() As DataTable
         'siapkan tabel kosong
